@@ -1,10 +1,12 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE "public"."user" (
-   "id" uuid DEFAULT gen_random_uuid() NOT NULL,
-   "name" varchar,
-   PRIMARY KEY ("id")
-);
+  "id" uuid DEFAULT gen_random_uuid(),
+      "name" varchar,
+      "mail" varchar(100),
+      "mp" varchar(100),
+      PRIMARY KEY ("id")
+  );
 
 CREATE TABLE "event" (
    "id" uuid DEFAULT gen_random_uuid() NOT NULL,
