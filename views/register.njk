@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<form action="/register" method="post">
+  <div>
+    <label>Name:</label>
+    <input type="text" name="name"/><br/>
+  </div>
+  <div>
+    <label>Email:</label>
+    <input type="text" name="mail"/><br/>
+  </div>
+  <div>
+    <label>Password:</label>
+    <input type="password" name="password"/>
+  </div>
+  <div>
+    <label>confirm password:</label>
+    <input type="password" name="passwordConfirm"/>
+  </div>
+  <div>
+    <button type="submit">
+      Submit
+    </button>
+  </div>
+</form>
+{% endblock %}
