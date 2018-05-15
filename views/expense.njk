@@ -9,21 +9,22 @@
       <table class="table  table-striped">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">All events</th>
+            <th scope="col">ADD UPDATE EXPENSES</th>
           </tr>
         </thead>
         <tbody>
           {% for row in rows %}
           <tr>
             <td>
-              <a href="/event/{{row.id}}"><h3>{{row.label}}</h3></a><p><small>{{row.description}}</small></p>
+              <a href="expense/{{row.id}}"><h3>{{row.label}}</h3></a><p><small>{{row.description}}{br/}{{row.amount}}/100{br/}{{row.user_id}}</small></p>
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-      <a href="event/new"><h3>{{row.label}}</h3>
-        <button type="button" class="btn btn-primary btn-lg">Add</button>
+      <button type="button" class="btn btn-primary btn-lg">Save</button>
+      <a href="#"><h3>{{row.label}}</h3>
+        <button type="button" class="btn btn-primary btn-lg">Cancel</button>
       </a><p><small>{{row.description}}</small></p>
     </div>
     <div class="col">

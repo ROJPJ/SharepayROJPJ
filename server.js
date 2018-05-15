@@ -5,6 +5,10 @@ const passport = require("passport");
 
 const getEvents = require("./handlers/get_events.js");
 const getAddEvent = require("./handlers/get_addEvent.js");
+const getEventExpenses = require("./handlers/get_eventExpenses.js");
+const getAddExpense = require("./handlers/get_addExpense.js");
+const getUpdateExpense = require("./handlers/get_updateExpense.js");
+
 
 const app = express();
 app.use(require("body-parser").urlencoded({ extended: true }));
@@ -89,7 +93,11 @@ app.get("/",
   require("connect-ensure-login").ensureLoggedIn("/login"),
   getEvents);
 
-app.get("/toto", getAddEvent);
+app.get("/event/new", getAddEvent);
+app.get("/event/:id", getEventExpenses);
+app.get("/expense/new", getAddExpense);
+app.get("/expense/:id", getUpdateExpense);
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, function () {
