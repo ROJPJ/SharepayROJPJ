@@ -1,0 +1,31 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <table class="table  table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Add Update event</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+            <td>
+              <a href="event/{{row.id}}"><h3>{{row.label}}</h3></a><p><small>{{row.description}}</small></p>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <button type="button" class="btn btn-primary btn-lg">Save</button>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+{% endblock %}
