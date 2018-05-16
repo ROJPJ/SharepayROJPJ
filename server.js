@@ -2,18 +2,16 @@ const express = require("express");
 const nunjucks = require("nunjucks");
 const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
-
 const Events = require("./handlers/get_events.js");
-
 const getEventExpenses = require("./handlers/get_eventExpenses.js");
 const getAddExpense = require("./handlers/get_addExpense.js");
 const getUpdateExpense = require("./handlers/get_updateExpense.js");
 const Users = require("./handlers/users.js");
-
-
+const FacebookStrategy = require("passport-facebook").Strategy;
+const FB = require("fb");
 const app = express();
-app.use(require("body-parser").urlencoded({ extended: true }));
-app.use(require("cookie-parser")());
+const tableUser = require("./entities/tableUser.js");
+
 app.use(express.static("public"));
 app.set("views", __dirname + "/views");
 app.set("view engine", "njk");
@@ -22,6 +20,9 @@ nunjucks.configure("views", {
   autoescape: true,
   express: app
 });
+
+app.use(require("body-parser").urlencoded({ extended: true }));
+app.use(require("cookie-parser")());
 
 app.use(
   require("express-session")({
@@ -34,6 +35,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 passport.serializeUser(function(user, callback) {
   return callback(null, user.id);
 });
@@ -41,6 +43,15 @@ passport.serializeUser(function(user, callback) {
 passport.deserializeUser(function(id, callback) {
   return callback(null, {"user_id": id});
 });
+
+// passport.serializeUser(function(user, callback) {
+//   return callback(null, user.mail);
+// });
+//
+// passport.deserializeUser(function(mail, callback) {
+//   return callback(null, {"mail": mail});
+// });
+
 
 passport.use(new LocalStrategy(
   function(email, password, callback) {
@@ -60,6 +71,64 @@ passport.use(new LocalStrategy(
       });
   }
 ));
+
+passport.serializeUser(function(user, callback) {
+  return callback(null, user.id);
+});
+
+passport.deserializeUser(function(id, callback) {
+  if (id) {
+    return callback(null, {
+      id: "661a1ebe-ad31-4c35-8520-af24e26c8a57",
+      email: "remi.deliance@decathlon.com"
+    });
+  } else {
+    return callback("User not found");
+  }
+
+});
+
+passport.use(new FacebookStrategy(
+    {
+      clientID: process.env.FB_APP_ID,
+      clientSecret: process.env.FB_SECRET,
+      callbackURL: process.env.CALLBACK_URL
+    },
+    function(accessToken, refreshToken, profile, callback) {
+      FB.api(
+        "me",
+        { fields: "id,name,email", access_token: accessToken },
+        function(user) {
+          console.log("from fb", user);
+          tableUser.getUserByMail(user.email)
+          .then((rows) => {
+            if (rows.length === 0){
+              tableUser.insertUser(user.name, user.email, user.id);
+            }
+          });
+          callback(null, {
+            id: "661a1ebe-ad31-4c35-8520-af24e26c8a57",
+            email: "remi.deliance@decathlon.com"
+          });
+        }
+      );
+    }
+  )
+);
+
+app.get("/auth/facebook",
+  passport.authenticate("facebook", {
+    authType: "rerequest", // rerequest is here to ask again if login was denied once,
+    scope: ["email"]
+  })
+);
+
+app.get("/auth/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/" }),
+  function(request, result) {
+      result.redirect("/");
+  }
+);
 
 app.get("/register", function(request, result) {
   result.render("register");
