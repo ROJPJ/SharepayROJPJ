@@ -5,6 +5,7 @@ CREATE TABLE "public"."user" (
       "name" varchar,
       "mail" varchar(100),
       "mp" varchar(100),
+      "id_fb" varchar,
       PRIMARY KEY ("id")
   );
 
