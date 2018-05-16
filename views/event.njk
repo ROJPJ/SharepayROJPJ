@@ -6,33 +6,44 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <table class="table  table-striped">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Add Update event</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in rows %}
-          <tr>
-            <td>
-              <h3>{{row.label}}</h3><p><small>{{row.description}}</small></p>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {# <input type="email" name="username" class="form-control" placeholder="email@example.com"> #}
-        <button type="button" class="btn btn-primary btn-lg">Save</button>
-      <a href="#"><h3>{{row.label}}</h3>
-        <button type="button" class="btn btn-primary btn-lg">Cancel</button>
-      </a><p><small>{{row.description}}</small></p>
-      <a href="#"><h3>{{row.label}}</h3>
-        <button type="button" class="btn btn-primary btn-lg">Close</button>
-      </a><p><small>{{row.description}}</small></p>
-      <a href="#"><h3>{{row.label}}</h3>
-        <button type="button" class="btn btn-primary btn-lg">Paid</button>
-      </a><p><small>{{row.description}}</small></p>
+      <div >Add Event</div>
+      <form action="/event/new" method="post">
+        <input type= "hidden" name= "user_id" value= "{{user.user_id}}">
+        <div>
+          <label>Label</label>
+          <input type="text" name="label" class="form-control">
+        </div>
+        <div>
+          <label>Description</label>
+          <input type="text" name="description" class="form-control">
+        </div>
+        <div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="mx-auto" scope="col">Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Jean Phi</th>
+              </tr>
+              <tr>
+                <th scope="row">Rémi</th>
+              </tr>
+              <tr>
+                <th scope="row">Olivier</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Save</button>
+          <a href= "/" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+          <button type="button" class="btn btn-secondary">Close</button>
+          <button type="button" class="btn btn-danger">Archive</button>
+        </div>
+      </form>
     </div>
     <div class="col">
     </div>

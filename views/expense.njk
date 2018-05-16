@@ -6,26 +6,20 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <table class="table  table-striped">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">ADD UPDATE EXPENSES</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in rows %}
-          <tr>
-            <td>
-              <a href="expense/{{row.id}}"><h3>{{row.label}}</h3></a><p><small>{{row.description}}{br/}{{row.amount}}/100{br/}{{row.user_id}}</small></p>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <button type="button" class="btn btn-primary btn-lg">Save</button>
-      <a href="#"><h3>{{row.label}}</h3>
-        <button type="button" class="btn btn-primary btn-lg">Cancel</button>
-      </a><p><small>{{row.description}}</small></p>
+      <div >Add Expense {{label}}</div>
+      <form action="/expense/save" method="post">
+        <input type= "hidden" name= "user_id" value= "{{user.user_id}}">
+        <input type= "hidden" name= "id" value= "{{id}}">
+        <div>
+          <label>Label</label>
+          <input type="text" name="label" class="form-control">
+        </div>
+        <div>
+          <label>Amount</label>
+          <input type="integer" name="amount" class="form-control">
+        </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a href= "/event/{{id}}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
     </div>
     <div class="col">
     </div>

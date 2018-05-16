@@ -1,5 +1,6 @@
 function getAddExpense(request, result) {
-    result.render("expense", {rows: {}});
+  console.log(request.body);
+    result.render("expense", request.body);
 }
 
 module.exports = getAddExpense;
