@@ -6,26 +6,12 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <table class="table  table-striped">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Event EXPENSES</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in rows %}
-          <tr>
-            <td>
-              <a href="/expense/{{row.id}}"><h3>{{row.label}}</h3></a><p><small>{{row.description}}</small></p>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <button type="button" class="btn btn-primary btn-lg">Save</button>
-      <a href="/expense/new"><h3>{{row.label}}</h3>
-        <button type="button" class="btn btn-primary btn-lg">Add</button>
-      </a><p><small>{{row.description}}</small></p>
+      <div >Event Expenses {{label}}</div>
+      <form action="/expense/add" method="post">
+        <input type= "hidden" name= "id" value= "{{id}}">
+        <input type= "hidden" name= "label" value= "{{label}}">
+      <button type="submit" class="btn btn-primary">Add</button>
+      <a href= "/" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
     </div>
     <div class="col">
     </div>

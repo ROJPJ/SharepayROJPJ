@@ -3,8 +3,7 @@ const nunjucks = require("nunjucks");
 const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
 
-const getEvents = require("./handlers/get_events.js");
-const getAddEvent = require("./handlers/get_addEvent.js");
+const Events = require("./handlers/get_events.js");
 
 const getEventExpenses = require("./handlers/get_eventExpenses.js");
 const getAddExpense = require("./handlers/get_addExpense.js");
@@ -36,11 +35,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser(function(user, callback) {
-  return callback(null, user.mail);
+  return callback(null, user.id);
 });
 
-passport.deserializeUser(function(mail, callback) {
-  return callback(null, {"mail": mail});
+passport.deserializeUser(function(id, callback) {
+  return callback(null, {"user_id": id});
 });
 
 passport.use(new LocalStrategy(
@@ -122,11 +121,28 @@ app.get("/profile",
 
 app.get("/",
   require("connect-ensure-login").ensureLoggedIn("/login"),
-  getEvents);
+  Events.getEvents);
 
-app.get("/event/new", getAddEvent);
-app.get("/event/:id", getEventExpenses);
-app.get("/expense/new", getAddExpense);
+app.get("/event/new",
+  require("connect-ensure-login").ensureLoggedIn("/login"),
+  Events.getAddEvent
+);
+app.post("/event/new",
+require("connect-ensure-login").ensureLoggedIn("/login"),
+ Events.saveEvent);
+
+app.get("/event/:id",
+require("connect-ensure-login").ensureLoggedIn("/login"),
+ getEventExpenses.getEventExpenses);
+
+app.post("/expense/add",
+require("connect-ensure-login").ensureLoggedIn("/login"),
+ getAddExpense);
+
+app.post("/expense/save",
+require("connect-ensure-login").ensureLoggedIn("/login"),
+ getEventExpenses.saveExpense);
+
 app.get("/expense/:id", getUpdateExpense);
 
 
