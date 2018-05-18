@@ -18,7 +18,8 @@ app.set("view engine", "njk");
 
 nunjucks.configure("views", {
   autoescape: true,
-  express: app
+  express: app,
+  watch: true
 });
 
 app.use(require("body-parser").urlencoded({ extended: true }));

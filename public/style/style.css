@@ -1,5 +1,5 @@
 body {
-color:black;
+color: black;
 background-color:white;
 background-image:url("https://www.mediadecathlon.com/__imageservlet/file/pixldamcomm/pj/02b/b15260286170290/backpacking-voyage-hotel5.jpg?w=-1&h=-1&p=1&z=0&ar=1&pn=0&bg=white&suffix=jpg");
 background-repeat:no-repeat;
@@ -11,15 +11,16 @@ background-size: cover;
 }
 
 #tableAll {
+  color: black;
   text-align: center;
   box-shadow: 0 .8rem 3rem rgba(0,0,0,5)!important;
+  box-sizing: content-box;
   background-color: rgba(255,255,255,0.3);
   padding: 0.7rem!important;
-  margin-bottom: -1rem!important;
   border-radius: 9rem!important;
   font-size: 2rem;
   font-weight: 800;
-  line-height: 0.5;
+  line-height: 0.6;
 }
 
 #contour {
@@ -45,8 +46,13 @@ background-color: rgba(255,255,255,0.5);
   text-align: center;
   border-radius: 9rem;
   font-size: 1.5rem;
+  margin-right: 0.5rem;
 }
 
 #transparentBackgroundLogin {
   background-color: rgba(255,255,255,0);
+}
+
+#nospaceBalance {
+  margin-bottom: 1rem;
 }
