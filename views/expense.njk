@@ -6,7 +6,8 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <h3>Expense for <b>{{event_label}}</b></h3>
+      <div id="tableAll">Expense for <b><br/><a href= "/event/{{id}}">{{event_label}}</a></b></div>
+
       <form action="/expense" method="post">
         <input type= "hidden" name= "id" value= "{{id}}">
         <input type= "hidden" name= "event_id" value= "{{event_id}}">

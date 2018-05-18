@@ -6,10 +6,10 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <table class="table  table-striped">
-        <thead class="thead-dark">
+      <table class="table  table-stripped" id="contour">
+        <thead class="thead-dark" id="contour">
           <tr>
-            <th scope="col">Balance</th>
+            <div class="shadow p-3 mb-5 rounded" id="tableAll"><i class="fas fa-hand-peace"></i> Balance </th>
           </tr>
         </thead>
         <tbody>
@@ -17,18 +17,58 @@
           <tr>
             <td>
               {# <p><small>{{row.from}} MUST PAY {{row.value}} TO {{row.to}}</small> #}
-              <p><small>{{row.fromName}} MUST PAY {{row.value}} TO {{row.toName}}</small>
+              <p><strong>{{row.fromName}}</strong><br/><small>to</small><br/><strong>{{row.toName}}</strong>
+            </td>
+            <td align="right">
+              <strong><font color="#007bff" size="4.5">{{(row.value/100) | round(2)}} €</font></strong>
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-      <a href="event/new"><h3>{{row.label}}</h3>
-        <button type="button" class="btn btn-primary btn-lg">Add</button>
-      </a><p><small>{{row.description}}</small></p>
+        <a href="/eventexpense/{{id}}"><h3>{{row.label}}</h3>
+          <button type="button" class="btn btn-primary btn-lg">Return</button>
+        </a><p><small>{{row.description}}</small></p>
     </div>
     <div class="col">
     </div>
   </div>
 </div>
 {% endblock %}
+{#
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <table class="table  table-bordered" id="contour">
+        <thead class="thead-dark" id="contour">
+          <tr>
+            <div class="shadow p-3 mb-5 rounded" id="tableAll"><i class="fas fa-hand-peace"></i>  All Events  </div>
+          </tr>
+        </thead>
+        <tbody>
+          <br>
+          {% for row in rows %}
+          <tr>
+            <td>
+              <a href="/eventexpense/{{row.id}}"><h3 id="titleEventDesing">{{row.label}}</h3></a><p><small id="allDescription">{{row.description}}</small></p>
+            </td>
+          </tr>
+          {% endfor %}
+        </br>
+        </tbody>
+      </table>
+      <center>
+      <a href="event"><h3>{{row.label}}</h3>
+        <button id="Button" type="button" class="btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i></button>
+      </a><p><small>{{row.description}}</small></p>
+    </center>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+{% endblock %} #}

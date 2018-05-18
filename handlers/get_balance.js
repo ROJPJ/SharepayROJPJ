@@ -19,7 +19,7 @@ function getEventExpenses(request, result) {
 
     Promise.all([promise3,promise4]).then(function(values2) {
       console.log("Result final pour affichage= ",balance);
-      result.render("balance", {rows: balance});
+      result.render("balance", {rows: balance, id:request.params.id});
     })
   })
 

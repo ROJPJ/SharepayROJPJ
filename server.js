@@ -19,7 +19,7 @@ app.set("view engine", "njk");
 nunjucks.configure("views", {
   autoescape: true,
   express: app,
-  watch: true
+  watch: true     //pour raffraichir html sans redémarrer le server
 });
 
 app.use(require("body-parser").urlencoded({ extended: true }));
