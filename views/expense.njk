@@ -1,0 +1,57 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <br>
+      <div id="tableAll">Expense for <b><br></br><a href= "/event/{{id}}" style="color: #007bff">{{event_label}}</a></b></div>
+      </br>
+      {# <div id="tableAll">Expense for <b><br/><a href= "/event/{{id}}">{{event_label}}</a></b></div> #}
+
+      <form action="/expense" method="post">
+        <input type= "hidden" name= "id" value= "{{id}}">
+        <input type= "hidden" name= "event_id" value= "{{event_id}}">
+        <div>
+          <label>Label</label>
+          <input type="text" name="label" class="form-control" value="{{label}}">
+        </div>
+        <div>
+          <label>Amount</label>
+          <input type="integer" name="amount" class="form-control" value="{{amount/100}}">
+        </div>
+        <div>
+          <label>Payer</label>
+          <input type="text" name="user_name" class="form-control" value="{{name}}">
+        </div>
+        <div>
+          <h4>Users</h4>
+          <table class="table" id="users" name="users">
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td>
+                  <input type="hidden" value="{{user.id}}" name="user"/>{{user.name}}
+                </td>
+                <td>
+                  <input type="checkbox" class="form-check-input" name="check[{{user.id}}]" {{user.checked}}/>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" name="btnSave" class="btn btn-primary">Save</button>
+        <a href= "/eventexpense/{{event_id}}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+        <button type="submit" name="btnDelete" class="btn btn-alert">Delete</button>
+        </br>
+        </br>
+      </form>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+{% endblock %}

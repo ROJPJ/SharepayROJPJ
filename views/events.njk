@@ -1,0 +1,110 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <table class="table  table-bordered" id="contour">
+        <thead class="thead-dark" id="contour">
+          <tr>
+            <div class="shadow p-3 mb-0.3 rounded" id="tableAll" ><i class="fas fa-hand-peace"></i>  All Events  </div>
+          </tr>
+        </thead>
+        <tbody>
+          <br>
+          {% for row in rows %}
+          <tr>
+            <td>
+              <a href="/eventexpense/{{row.id}}"><h3 id="titleEventDesing">{{row.label}}</h3></a><p><small id="allDescription">{{row.description}}</small></p>
+            </td>
+          </tr>
+          {% endfor %}
+        </br>
+        </tbody>
+      </table>
+      <center>
+      <a href="event"><h3>{{row.label}}</h3>
+      <button id="Button" type="button" class="btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i></button>
+      </a><p><small>{{row.description}}</small></p>
+    </center>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{# {% extends "layout.njk" %}
+
+{% block content %}
+<html><head>
+  <meta charset="utf-8">
+  <title>Sharepay</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/SimpleStarRating.css">
+  <link rel="stylesheet" href="/style/style.css">
+</head><body>
+
+  <div class="container">
+    <div class="mx-auto" style="width: 600px;">
+      <div class="col">
+      </div>
+      <div class="mx-auto">
+        <div class="shadow p-3 mb-5 rounded" id="tableAll"><i class="fas fa-hand-peace"></i> Events  </div>
+        <form action="/event" method="post" class="m-4 font-weight-light">
+          <input type="hidden" name="user_id" value="661a1ebe-ad31-4c35-8520-af24e26c8a57">
+          <input type="hidden" name="id" value="">
+          <div>
+            <label>Label</label>
+            <input type="text" name="label" class="form-control margin-top 3rem" value="">
+          </div>
+          <div>
+            <label>Description</label>
+            <input type="text" name="description" class="form-control" value="">
+          </div>
+
+
+          <table class="table" id="users" name="users">
+            <tbody>
+
+            </tbody>
+          </table>
+          <div>
+            <input type="text" placeholder="New user" id="user">
+            <span onclick="addUser()" class="mx-auto badge badge-success  m-4">Add user</span>
+          </div>
+        </form></div>
+        <div class="list-group" role="group" aria-label="Basic example">
+          <button type="submit" class="btn btn-outline-success">Save</button>
+          <button type="button" class="btn btn-outline-danger">Close</button>
+          <button type="button" class="btn btn-outline-info">Archive</button>
+        </div>
+        <a href="/" id="cancel" name="cancel" class="m-4 btn btn-danger">Cancel</a>
+
+      </div>
+      <div class="col">
+      </div>
+    </div>
+
+    <script>
+    function addUser() {
+      const table = document.getElementById("users");
+      const row = table.insertRow();
+      let cell = row.insertCell();
+      let user = document.getElementById("user");
+      cell.innerHTML = `<input type="hidden" value="${user.value}" name="user"/>${user.value}`;
+      user.value = "";
+    }
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+
+</body></html>
+{% endblock %} #}

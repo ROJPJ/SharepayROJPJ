@@ -1,0 +1,67 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-6" >
+      <h3 id="tableAll"><i class="fas fa-hand-peace"></i> Event {{event.label}}</h3>
+      <form action="/event" method="post">
+        <input type= "hidden" name= "user_id" value= "{{user.user_id}}">
+        <input type= "hidden" name= "id" value= "{{event.id}}">
+        <div>
+          <label></label>
+          <input id="transparentBackgroundEvent" type="text" name="label" class="form-control" placeholder="Label" value="{{event.label}}">
+        </div>
+        <div>
+          <label></label>
+          <input id="transparentBackgroundEvent" type="text" name="description" class="form-control" placeholder="Description" value="{{event.description}}">
+        </div>
+        <label></label>
+        <div id="transparentBackgroundEvent" class="card">
+          <strong><font color="#007bff" face="American Typewriter, serif" size="5"<h4>Friends</h4></font></strong>
+          <table class="table" id="users" name="users">
+            <tbody>
+              {% for user in event.users %}
+              <tr>
+                <td>
+                  <input type="hidden" value="{{user.name}}" name="user"/>{{user.name}}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div>
+            <input id="transparentBackgroundEvent" type="text" placeholder="New friend" id="user">
+            <span click="addUser()" class="btn btn-primary"><i class="fas fa-plus-circle"></i></span>
+          </div>
+        </div>
+        <label></label>
+        <div>
+          <center>
+          <button type="submit" class="btn btn-primary">Save</button>
+          <a href="/{% if event.id %}eventexpense/{{event.id}}{% endif %}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+          <!--button type="button" class="btn btn-secondary">Close</button-->
+          <!--button type="button" class="btn btn-danger">Archive</button-->
+          <button type="submit" name="btnDelete" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+<script>
+  function addUser() {
+    const table = document.getElementById("users");
+    if (user.value.length > 0) {
+      const row = table.insertRow();
+      let cell = row.insertCell();
+      let user = document.getElementById("user");
+      cell.innerHTML = `<input type="hidden" value="${user.value}" name="user"/>${user.value}`;
+    }
+    user.value = "";
+  }
+</script>
+{% endblock %}

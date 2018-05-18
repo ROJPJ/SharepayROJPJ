@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <br>
+      <div id="tableAll">Event Expenses : <b><br></br><a href= "/event/{{id}}" style= "color: green">{{label}}</a></b></div>
+      </br>
+    <center>
+      <form action="/eventexpense" method="post">
+        <input type= "hidden" name= "id" value= "{{id}}">
+        <input type= "hidden" name= "label" value= "{{label}}">
+        <div>
+          <table id="contour" class="table" id="users" name="users">
+            <tbody>
+              {% for expense in expenses %}
+              <tr>
+                <td>
+                  <a href= "/expense/{{expense.id}}" name="expense" >
+                    <font color="black">{{expense.label}}</a>
+                </td>
+                <td align="right">
+                  <strong><font color="#007bff">{{expense.amount/100}} €</font></strong>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button id="Button" type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i></button>
+        <a href= "/" id= "cancel" name= "cancel" class="btn btn-light border-radius: 0.9rem">Cancel</a>
+        </center>
+        <br></br>
+        <a href= "/balance/{{id}}" class="btn  transparent-background btn-primary">Balance</a>
+    </form>
+    </div>
+    <div class="col">
+    </div>
+</div>
+</div>
+{% endblock %}
