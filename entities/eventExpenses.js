@@ -8,6 +8,15 @@ function findEventById(id) {
   client.connect();
   return client.query("SELECT * FROM public.event where id=$1::uuid", [id])
   .then((result) => result.rows[0])
+  .then((event) => {
+    return client.query(
+      "SELECT * FROM public.expense x WHERE event_id=$1::uuid",
+      [event.id])
+      .then((result) => {
+        event.expenses = result.rows;
+        return event;
+      });
+  })
   .then((data) => {
       client.end();
       return data;

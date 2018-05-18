@@ -6,40 +6,39 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <div >Add Event</div>
-      <form action="/event/new" method="post">
+      <h3>Event {{event.label}}</h3>
+      <form action="/event" method="post">
         <input type= "hidden" name= "user_id" value= "{{user.user_id}}">
+        <input type= "hidden" name= "id" value= "{{event.id}}">
         <div>
           <label>Label</label>
-          <input type="text" name="label" class="form-control">
+          <input type="text" name="label" class="form-control" value="{{event.label}}">
         </div>
         <div>
           <label>Description</label>
-          <input type="text" name="description" class="form-control">
+          <input type="text" name="description" class="form-control" value="{{event.description}}">
         </div>
         <div>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th class="mx-auto" scope="col">Name</th>
-              </tr>
-            </thead>
+          <h4>Users</h4>
+          <table class="table" id="users" name="users">
             <tbody>
+              {% for user in event.users %}
               <tr>
-                <th scope="row">Jean Phi</th>
+                <td>
+                  <input type="hidden" value="{{user.name}}" name="user"/>{{user.name}}
+                </td>
               </tr>
-              <tr>
-                <th scope="row">Rémi</th>
-              </tr>
-              <tr>
-                <th scope="row">Olivier</th>
-              </tr>
+              {% endfor %}
             </tbody>
           </table>
+          <div>
+            <input type="text" placeholder="new user" id="user">
+            <span onclick="addUser()" class="btn btn-primary">Add user</span>
+          </div>
         </div>
         <div>
           <button type="submit" class="btn btn-primary">Save</button>
-          <a href= "/" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+          <a href="/{% if event.id %}eventexpense/{{event.id}}{% endif %}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
           <button type="button" class="btn btn-secondary">Close</button>
           <button type="button" class="btn btn-danger">Archive</button>
         </div>
@@ -49,4 +48,14 @@
     </div>
   </div>
 </div>
+<script>
+  function addUser() {
+    const table = document.getElementById("users");
+    const row = table.insertRow();
+    let cell = row.insertCell();
+    let user = document.getElementById("user");
+    cell.innerHTML = `<input type="hidden" value="${user.value}" name="user"/>${user.value}`;
+    user.value = "";
+  }
+</script>
 {% endblock %}

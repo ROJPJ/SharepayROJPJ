@@ -1,4 +1,4 @@
-const expense = require("../entities/updateExpense.js");
+const expense = require("../entities/tableExpense.js");
 const expenseUser = require("../entities/tableExpenseUser.js");
 const eventUser = require("../entities/tableEventUser.js");
 const user = require("../entities/tableUser.js");

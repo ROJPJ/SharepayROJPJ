@@ -7,14 +7,31 @@
     </div>
     <div class="col-6">
       <br>
-      <div id="tableAll">Event Expenses {{label}}</div>
+      <div id="tableAll">Event Expenses for <b><a href= "/event/{{id}}">{{label}}</a></b></div>
     </br>
     <center>
-      <form action="/expense/add" method="post">
+      <form action="/eventexpense" method="post">
         <input type= "hidden" name= "id" value= "{{id}}">
         <input type= "hidden" name= "label" value= "{{label}}">
-      <button type="submit" class="btn btn-primary">Add</button>
-      <a href= "/" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+        <div>
+          <table class="table" id="users" name="users">
+            <tbody>
+              {% for expense in expenses %}
+              <tr>
+                <td>
+                  <a href= "/expense/{{expense.id}}" name="expense">{{expense.label}}</a>
+                </td>
+                <td>
+                  {{expense.amount/100}}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="btn btn-primary">Add expense</button>
+        <a href= "/" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+      </form>
     </center>
     </div>
     <div class="col">

@@ -17,7 +17,7 @@
           {% for row in rows %}
           <tr>
             <td>
-              <a href="/event/{{row.id}}"><h3 id="titleEventDesing">{{row.label}}</h3></a><p><small id="allDescription">{{row.description}}</small></p>
+              <a href="/eventexpense/{{row.id}}"><h3 id="titleEventDesing">{{row.label}}</h3></a><p><small id="allDescription">{{row.description}}</small></p>
             </td>
           </tr>
           {% endfor %}
@@ -25,7 +25,7 @@
         </tbody>
       </table>
       <center>
-      <a href="event/new"><h3>{{row.label}}</h3>
+      <a href="event"><h3>{{row.label}}</h3>
         <button id="Button" type="button" class="btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i></button>
       </a><p><small>{{row.description}}</small></p>
     </center>

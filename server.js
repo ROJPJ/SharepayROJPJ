@@ -2,16 +2,14 @@ const express = require("express");
 const nunjucks = require("nunjucks");
 const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
-const Events = require("./handlers/get_events.js");
-const getEventExpenses = require("./handlers/get_eventExpenses.js");
-const getBalance = require("./handlers/get_balance.js");
-const getAddExpense = require("./handlers/get_addExpense.js");
-const getUpdateExpense = require("./handlers/get_updateExpense.js");
-const Users = require("./handlers/users.js");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const FB = require("fb");
-const app = express();
+
+const Events = require("./handlers/get_events.js");
+const getEventExpenses = require("./handlers/get_eventExpenses.js");
+const Expense = require("./handlers/get_expense.js");
 const tableUser = require("./entities/tableUser.js");
+const getBalance = require("./handlers/get_balance.js");
 
 app.use(express.static('public'));
 app.set("views", __dirname + "/views");
@@ -45,49 +43,22 @@ passport.deserializeUser(function(id, callback) {
   return callback(null, {"user_id": id});
 });
 
-// passport.serializeUser(function(user, callback) {
-//   return callback(null, user.mail);
-// });
-//
-// passport.deserializeUser(function(mail, callback) {
-//   return callback(null, {"mail": mail});
-// });
-
-
 passport.use(new LocalStrategy(
   function(email, password, callback) {
-      Users.findByMail(email, function(error, user) {
-        if (error) {
-          return callback(error);
-        }
-        if (!user) {
-          console.log(`the email ${email} is unknown.`);
-          return callback(null, false);
-        }
-        if (user.mp != password) {
-          console.log(`bad password.`);
-          return callback(null, false);
-        }
-        return callback(null, user);
-      });
+    tableUser.getUserByMail(email)
+    .then((user) => {
+      if (!user) {
+        console.log(`the email ${email} is unknown.`);
+        return callback(null, false);
+      }
+      if (user.mp != password) {
+        console.log(`bad password.`);
+        return callback(null, false);
+      }
+      return callback(null, user);
+    });
   }
 ));
-
-passport.serializeUser(function(user, callback) {
-  return callback(null, user.id);
-});
-
-passport.deserializeUser(function(id, callback) {
-  if (id) {
-    return callback(null, {
-      id: "661a1ebe-ad31-4c35-8520-af24e26c8a57",
-      email: "remi.deliance@decathlon.com"
-    });
-  } else {
-    return callback("User not found");
-  }
-
-});
 
 passport.use(new FacebookStrategy(
     {
@@ -143,21 +114,20 @@ app.post("/register", function(request, result) {
     console.log("password and confirmed password are different.");
     return result.redirect("/register");
   }
-  Users.create(user, function(error, user) {
-    if (user) {
-      console.log(`Successfully registered user with email: ${user.mail}`);
-      request.logIn(user, function(error) {
-        if (error) {
-          console.log(error);
-          return result.redirect("/register");
-        }
-        return result.redirect("/");
-      });
-    }
-    if (error) {
-      console.log(error);
-      return result.redirect("/register");
-    }
+  tableUser.insertUser(user)
+  .then((row) => {
+    console.log(`Successfully registered user with email: ${user.mail}`);
+    request.logIn(user, function(error) {
+      if (error) {
+        console.log(error);
+        return result.redirect("/register");
+      }
+      return result.redirect("/");
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+    return result.redirect("/register");
   });
 });
 
@@ -195,33 +165,39 @@ app.get("/",
   require("connect-ensure-login").ensureLoggedIn("/login"),
   Events.getEvents);
 
-app.get("/event/new",
+app.get("/event/:id",
+  require("connect-ensure-login").ensureLoggedIn("/login"),
+  Events.getUpdateEvent
+);
+
+app.get("/event",
   require("connect-ensure-login").ensureLoggedIn("/login"),
   Events.getAddEvent
 );
-app.post("/event/new",
+
+app.get("/balance/:id",
 require("connect-ensure-login").ensureLoggedIn("/login"),
- Events.saveEvent);
+ getBalance);
 
-app.get("/event/:id",
-require("connect-ensure-login").ensureLoggedIn("/login"),
- getEventExpenses.getEventExpenses);
+app.post("/event",
+  require("connect-ensure-login").ensureLoggedIn("/login"),
+  Events.saveEvent);
 
- app.get("/balance/:id",
- require("connect-ensure-login").ensureLoggedIn("/login"),
-  getBalance);
+app.get("/eventexpense/:id",
+  require("connect-ensure-login").ensureLoggedIn("/login"),
+  getEventExpenses.getEventExpenses);
 
-app.post("/expense/add",
-require("connect-ensure-login").ensureLoggedIn("/login"),
- getAddExpense);
+app.post("/eventexpense",
+  require("connect-ensure-login").ensureLoggedIn("/login"),
+  Expense.getAddExpense);
 
-app.post("/expense/save",
-require("connect-ensure-login").ensureLoggedIn("/login"),
- getEventExpenses.saveExpense);
+app.get("/expense/:id",
+  require("connect-ensure-login").ensureLoggedIn("/login"),
+  Expense.getUpdateExpense);
 
-app.get("/expense/:id", getUpdateExpense);
-
-
+app.post("/expense",
+  require("connect-ensure-login").ensureLoggedIn("/login"),
+  Expense.saveExpense);
 
 const port = process.env.PORT || 3000;
 app.listen(port, function () {
