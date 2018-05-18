@@ -1,4 +1,6 @@
 const PG = require("pg");
+const uuidv4 = require("uuid/v4");
+const tableUser = require("../entities/tableUser.js");
 
 function findById(id) {
   const client = new PG.Client({connectionString: process.env.DATABASE_URL});
@@ -47,7 +49,7 @@ function getEventExpense(id) {
     .then((result) => result.rows[0])
     .then((expense) => {
       return client.query(
-        `SELECT eu.user_id event_user_id, u.name, xu.user_id expense_user_id
+        `SELECT eu.user_id id, u.name, xu.user_id expense_user_id
          FROM public.expense x
          INNER JOIN public.event_user eu ON x.event_id=eu.event_id
          INNER JOIN public.user u ON eu.user_id=u.id
@@ -76,15 +78,19 @@ function saveExpense(expense){
     }
   }
 
-  if (!expense.id) {
-    expense.id = uuidv4();
-    console.log("INSERT Expense", expense);
-    return insertExpense(expense);
-  }
-  else {
-    console.log("UPDATE Expense", expense);
-    return updateExpense(expense);
-  }
+  return tableUser.getUserByNameWithCreate(expense.user_name).
+  then((payer) => {
+    expense.user_id = payer.id;
+    if (expense.delete) {
+      return deleteExpense(expense);
+    } else if (!expense.id) {
+      expense.id = uuidv4();
+      return insertExpense(expense);
+    }
+    else {
+      return updateExpense(expense);
+    }
+  });
 }
 
 function updateExpense(expense) {
@@ -92,11 +98,13 @@ function updateExpense(expense) {
   client.connect();
 
   return client.query(
-    "UPDATE expense SET label=$2::varchar, description=$3::varchar, date=$4::date, user_id=$5::uuid WHERE id=$1::uuid",
-    [event.id, event.label, event.description, event.date, event.user_id])
+    `UPDATE expense
+      SET label=$2::varchar, amount=$3::integer, date=$4::date, user_id=$5::uuid
+      WHERE id=$1::uuid`,
+    [expense.id, expense.label, expense.amount, expense.date, expense.user_id])
     .then((data) => {
-      event.user.forEach((user) => {
-        saveUserEvent(event.id, user)
+      expense.user.forEach((user) => {
+        saveUserExpense(expense.id, user, (expense.check[user] === 'on'))
       });
       client.end();
       return data;
@@ -111,11 +119,12 @@ function insertExpense(expense) {
   const client = new PG.Client(process.env.DATABASE_URL);
   client.connect();
   return client.query(
-    "INSERT INTO event (id, label, description, date, user_id, status_id) values ($1::uuid, $2::varchar, $3::text, $4::date, $5::uuid, $6::varchar)",
-    [event.id, event.label, event.description, event.date, event.user_id, event.status_id])
+    `INSERT INTO expense (id, label, amount, date, user_id, event_id)
+     values ($1::uuid, $2::varchar, $3::integer, $4::date, $5::uuid, $6::uuid)`,
+     [expense.id, expense.label, expense.amount, expense.date, expense.user_id, expense.event_id])
     .then((data) => {
-      event.user.forEach((user) => {
-        saveUserExpense(event.id, user)
+      expense.user.forEach((user) => {
+        saveUserExpense(expense.id, user, (expense.check[user] === 'on'))
       });
       client.end();
       return data;
@@ -126,35 +135,67 @@ function insertExpense(expense) {
     });
 }
 
-function saveUserExpense(expense_id, userName) {
-  return tableUser.getUserByNameWithCreate(userName).
-  then((user) => {
-    const client = new PG.Client(process.env.DATABASE_URL);
-    client.connect();
+function saveUserExpense(expense_id, user_id, checked) {
+  const client = new PG.Client(process.env.DATABASE_URL);
+  client.connect();
 
+  return client.query(
+    "SELECT * FROM public.expense_user WHERE expense_id=$1::uuid AND user_id=$2::uuid",
+    [expense_id, user_id])
+  .then((rows) => {
+    if (rows.rowCount === 0 && checked) {
+      return client.query(
+        "INSERT INTO public.expense_user (expense_id, user_id) VALUES ($1::uuid, $2::uuid)",
+        [expense_id, user_id])
+      .then((inserted) => {
+        client.end();
+        return true;
+      })
+      .catch((error) => {
+        console.warn("saveUserExpense INSERT", error);
+        client.end();
+        return false;
+      });
+    } else if (rows.rowCount > 0 && !checked) {
+      return client.query(
+        "DELETE FROM public.expense_user WHERE expense_id=$1::uuid AND user_id=$2::uuid",
+        [expense_id, user_id])
+      .then((deleted) => {
+        client.end();
+        return true;
+      })
+      .catch((error) => {
+        console.warn("saveUserExpense DELETE", error);
+        client.end();
+        return false;
+      });
+    }
+  })
+  .catch((error) => {
+    console.warn(error);
+    client.end();
+  });
+}
+
+function deleteExpense(expense) {
+  const client = new PG.Client(process.env.DATABASE_URL);
+  client.connect();
+  return client.query(
+    "DELETE FROM public.expense_user WHERE expense_id=$1::uuid",
+    [expense.id])
+  .then((deleted) => {
     return client.query(
-      "SELECT * FROM public.event_user WHERE event_id=$1::uuid AND user_id=$2::uuid",
-      [event_id, user.id])
-    .then((rows) => {
-      if (rows.rowCount === 0) {
-        return client.query(
-          "INSERT INTO public.event_user (event_id, user_id) VALUES ($1::uuid, $2::uuid)",
-          [event_id, user.id])
-        .then((insert) => {
-          client.end();
-          return true;
-        })
-        .catch((error) => {
-          console.warn(error);
-          client.end();
-          return false;
-        });
-      }
-    })
-    .catch((error) => {
-      console.warn(error);
-      client.end();
-    });
+      "DELETE FROM public.expense WHERE id=$1::uuid",
+      [expense.id])
+      .then((deleted) => {
+        client.end();
+        return true;
+      });
+  })
+  .catch((error) => {
+    console.warn("Expense DELETE", error);
+    client.end();
+    return false;
   });
 }
 
@@ -162,5 +203,6 @@ module.exports = {
   findById: findById,
   findEventId: findEventId,
   getEventExpense: getEventExpense,
-  saveExpense: saveExpense
+  saveExpense: saveExpense,
+  deleteExpense: deleteExpense
 };
