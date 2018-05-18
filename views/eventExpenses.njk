@@ -6,12 +6,16 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <div >Event Expenses {{label}}</div>
+      <br>
+      <div id="tableAll">Event Expenses {{label}}</div>
+    </br>
+    <center>
       <form action="/expense/add" method="post">
         <input type= "hidden" name= "id" value= "{{id}}">
         <input type= "hidden" name= "label" value= "{{label}}">
       <button type="submit" class="btn btn-primary">Add</button>
       <a href= "/" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+    </center>
     </div>
     <div class="col">
     </div>
