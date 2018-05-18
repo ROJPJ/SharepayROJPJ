@@ -33,8 +33,8 @@
             </tbody>
           </table>
           <div>
-            <input id="transparentBackgroundEvent" type="text" placeholder="New friend" id="user">
-            <span click="addUser()" class="btn btn-primary"><i class="fas fa-plus-circle"></i></span>
+            <input type="text" placeholder="New friend" id="user">
+            <span onclick="addUser()" class="btn btn-primary"><i class="fas fa-plus-circle"></i></span>
           </div>
         </div>
         <label></label>
@@ -54,14 +54,15 @@
 </div>
 <script>
   function addUser() {
-    const table = document.getElementById("users");
+    console.log("addUser");
+    let user = document.getElementById("user");
     if (user.value.length > 0) {
+      const table = document.getElementById("users");
       const row = table.insertRow();
       let cell = row.insertCell();
-      let user = document.getElementById("user");
       cell.innerHTML = `<input type="hidden" value="${user.value}" name="user"/>${user.value}`;
+      user.value = "";
     }
-    user.value = "";
   }
 </script>
 {% endblock %}
