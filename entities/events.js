@@ -1,6 +1,7 @@
 const PG = require("pg");
 const uuidv4 = require("uuid/v4");
 const tableUser = require("../entities/tableUser.js");
+const tableExpense = require("../entities/tableExpense.js");
 
 function findAll() {
   const client = new PG.Client(process.env.DATABASE_URL);
@@ -53,7 +54,9 @@ function saveEvent(event) {
     }
   }
 
-  if (!event.id) {
+  if (event.delete) {
+    return deleteEvent(event);
+  } else if (!event.id) {
     event.id = uuidv4();
     return insertEvent(event);
   }
@@ -130,6 +133,36 @@ function saveUserEvent(event_id, userName) {
       console.warn(error);
       client.end();
     });
+  });
+}
+
+function deleteEvent(event) {
+  const client = new PG.Client(process.env.DATABASE_URL);
+  client.connect();
+  return client.query(
+    "SELECT id FROM public.expense WHERE event_id=$1::uuid",
+    [event.id])
+  .then((expenses) => {
+    return expenses.rows.forEach((expense) => tableExpense.deleteExpense(expense))
+  })
+  .then((deleted) => {
+    return client.query(
+      "DELETE FROM public.event_user WHERE event_id=$1::uuid",
+      [event.id])
+    .then((deleted) => {
+      return client.query(
+        "DELETE FROM public.event WHERE id=$1::uuid",
+        [event.id])
+        .then((deleted) => {
+          client.end();
+          return true;
+        });
+    })
+  })
+  .catch((error) => {
+    console.warn("Event DELETE", error);
+    client.end();
+    return false;
   });
 }
 

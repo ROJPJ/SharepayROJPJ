@@ -21,6 +21,7 @@ function getUpdateEvent(request, result) {
 function saveEvent(request, result){
   let event = request.body;
 
+  event.delete = (event.btnDelete !== undefined);
   const currentdate = new Date();
   const year = currentdate.getFullYear();
   const month = "0" + currentdate.getMonth();
@@ -32,8 +33,12 @@ function saveEvent(request, result){
   }
 
   events.saveEvent(event)
-  .then((event) => {
-    result.render("eventExpenses", event);
+  .then((saved) => {
+    if (event.delete) {
+      getEvents(request, result);
+    } else {
+      result.render("eventExpenses", event);
+    }
   })
   .catch((error) => {
     console.warn(error);
