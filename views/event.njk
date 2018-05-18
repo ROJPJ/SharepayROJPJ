@@ -39,8 +39,9 @@
         <div>
           <button type="submit" class="btn btn-primary">Save</button>
           <a href="/{% if event.id %}eventexpense/{{event.id}}{% endif %}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
-          <button type="button" class="btn btn-secondary">Close</button>
-          <button type="button" class="btn btn-danger">Archive</button>
+          <!--button type="button" class="btn btn-secondary">Close</button-->
+          <!--button type="button" class="btn btn-danger">Archive</button-->
+          <button type="submit" name="btnDelete" class="btn btn-danger">Delete</button>
         </div>
       </form>
     </div>
