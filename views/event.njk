@@ -52,10 +52,12 @@
 <script>
   function addUser() {
     const table = document.getElementById("users");
-    const row = table.insertRow();
-    let cell = row.insertCell();
-    let user = document.getElementById("user");
-    cell.innerHTML = `<input type="hidden" value="${user.value}" name="user"/>${user.value}`;
+    if (user.value.length > 0) {
+      const row = table.insertRow();
+      let cell = row.insertCell();
+      let user = document.getElementById("user");
+      cell.innerHTML = `<input type="hidden" value="${user.value}" name="user"/>${user.value}`;
+    }
     user.value = "";
   }
 </script>
