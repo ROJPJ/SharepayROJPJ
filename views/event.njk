@@ -5,21 +5,22 @@
   <div class="row">
     <div class="col">
     </div>
-    <div class="col-6">
-      <h3>Event {{event.label}}</h3>
+    <div class="col-6" >
+      <h3 id="tableAll"><i class="fas fa-hand-peace"></i> Event {{event.label}}</h3>
       <form action="/event" method="post">
         <input type= "hidden" name= "user_id" value= "{{user.user_id}}">
         <input type= "hidden" name= "id" value= "{{event.id}}">
         <div>
-          <label>Label</label>
-          <input type="text" name="label" class="form-control" value="{{event.label}}">
+          <label></label>
+          <input id="transparentBackgroundEvent" type="text" name="label" class="form-control" placeholder="Label" value="{{event.label}}">
         </div>
         <div>
-          <label>Description</label>
-          <input type="text" name="description" class="form-control" value="{{event.description}}">
+          <label></label>
+          <input id="transparentBackgroundEvent" type="text" name="description" class="form-control" placeholder="Description" value="{{event.description}}">
         </div>
-        <div>
-          <h4>Users</h4>
+        <label></label>
+        <div id="transparentBackgroundEvent" class="card">
+          <strong><font color="#007bff" face="American Typewriter, serif" size="5"<h4>Friends</h4></font></strong>
           <table class="table" id="users" name="users">
             <tbody>
               {% for user in event.users %}
@@ -32,15 +33,18 @@
             </tbody>
           </table>
           <div>
-            <input type="text" placeholder="new user" id="user">
-            <span onclick="addUser()" class="btn btn-primary">Add user</span>
+            <input id="transparentBackgroundEvent" type="text" placeholder="New friend" id="user">
+            <span click="addUser()" class="btn btn-primary"><i class="fas fa-plus-circle"></i></span>
           </div>
         </div>
+        <label></label>
         <div>
+          <center>
           <button type="submit" class="btn btn-primary">Save</button>
           <a href="/{% if event.id %}eventexpense/{{event.id}}{% endif %}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
           <button type="button" class="btn btn-secondary">Close</button>
           <button type="button" class="btn btn-danger">Archive</button>
+        </center>
         </div>
       </form>
     </div>
