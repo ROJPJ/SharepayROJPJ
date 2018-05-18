@@ -12,7 +12,7 @@ const FB = require("fb");
 const app = express();
 const tableUser = require("./entities/tableUser.js");
 
-app.use(express.static("public"));
+app.use(express.static('public'));
 app.set("views", __dirname + "/views");
 app.set("view engine", "njk");
 
