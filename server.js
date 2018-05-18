@@ -4,6 +4,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const FB = require("fb");
+const app = express();
 
 const Events = require("./handlers/get_events.js");
 const getEventExpenses = require("./handlers/get_eventExpenses.js");

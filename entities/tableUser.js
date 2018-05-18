@@ -1,6 +1,23 @@
 const PG = require("pg");
 const uuidv4 = require("uuid/v4");
 
+function getUserById(id) {
+  const client = new PG.Client(process.env.DATABASE_URL);
+  client.connect();
+  return client.query(
+    "SELECT * from public.user WHERE id=$1::uuid",
+    [id])
+    .then((result) => result.rows)
+    .then((data) => {
+      client.end();
+      return data;
+    })
+    .catch((error) => {
+      console.warn(error);
+      client.end();
+    });
+}
+
 function getUserByMail(userMail) {
   const client = new PG.Client(process.env.DATABASE_URL);
   client.connect();
