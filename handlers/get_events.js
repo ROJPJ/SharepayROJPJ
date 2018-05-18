@@ -21,28 +21,32 @@ function getUpdateEvent(request, result) {
 function saveEvent(request, result){
   let event = request.body;
 
-  event.delete = (event.btnDelete !== undefined);
-  const currentdate = new Date();
-  const year = currentdate.getFullYear();
-  const month = "0" + currentdate.getMonth();
-  const day = "0" + currentdate.getDay();
-  event.date = `${year}-${month.substr(-2, 2)}-${day.substr(-2, 2)}`;
+  if (event.label.length === 0) {
+    getEvents(request, result);
+  } else {
+    event.delete = (event.btnDelete !== undefined);
+    const currentdate = new Date();
+    const year = currentdate.getFullYear();
+    const month = "0" + currentdate.getMonth();
+    const day = "0" + currentdate.getDay();
+    event.date = `${year}-${month.substr(-2, 2)}-${day.substr(-2, 2)}`;
 
-  if (!event.status_id) {
-    event.status_id = "O";
-  }
-
-  events.saveEvent(event)
-  .then((saved) => {
-    if (event.delete) {
-      getEvents(request, result);
-    } else {
-      result.render("eventExpenses", event);
+    if (!event.status_id) {
+      event.status_id = "O";
     }
-  })
-  .catch((error) => {
-    console.warn(error);
-  });
+
+    events.saveEvent(event)
+    .then((saved) => {
+      if (event.delete) {
+        getEvents(request, result);
+      } else {
+        result.render("eventExpenses", event);
+      }
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  }
 }
 
 module.exports = {
