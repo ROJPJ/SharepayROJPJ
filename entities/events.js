@@ -29,7 +29,7 @@ function getEvent(id) {
     .then((result) => result.rows[0])
     .then((event) => {
       return client.query(
-        "SELECT name FROM public.event_user e INNER JOIN public.user u ON e.user_id=u.id WHERE event_id=$1::uuid",
+        "SELECT id, name FROM public.event_user e INNER JOIN public.user u ON e.user_id=u.id WHERE event_id=$1::uuid",
         [event.id])
         .then((result) => {
           event.users = result.rows;
@@ -55,11 +55,9 @@ function saveEvent(event) {
 
   if (!event.id) {
     event.id = uuidv4();
-    console.log("INSERT", event);
     return insertEvent(event);
   }
   else {
-    console.log("UPDATE", event);
     return updateEvent(event);
   }
 }

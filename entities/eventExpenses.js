@@ -30,7 +30,6 @@ function findEventById(id) {
 function insertExpense(expense) {
   const client = new PG.Client(process.env.DATABASE_URL);
   client.connect();
-  console.log(expense);
   return client.query(
     "INSERT INTO expense (id,label,event_id,amount,date,user_id) values ($1::uuid, $2::varchar, $3::uuid, $4::integer, $5::date, $6::uuid)",
     [expense.id, expense.label, expense.event_id, expense.amount, expense.date, expense.user_id])

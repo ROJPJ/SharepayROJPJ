@@ -7,38 +7,38 @@
     </div>
     <div class="col-6">
       <br>
-      <div id="tableAll">Event Expenses for <b><a href= "/event/{{id}}">{{label}}</a></b></div>
+      <div id="tableAll">Event Expenses : <b><br></br><a href= "/event/{{id}}" style= "color: green">{{label}}</a></b></div>
     </br>
     <center>
       <form action="/eventexpense" method="post">
         <input type= "hidden" name= "id" value= "{{id}}">
         <input type= "hidden" name= "label" value= "{{label}}">
         <div>
-          <table class="table" id="users" name="users">
+          <table id="contour" class="table" id="users" name="users">
             <tbody>
               {% for expense in expenses %}
               <tr>
                 <td>
-                  <a href= "/expense/{{expense.id}}" name="expense">{{expense.label}}</a>
+                  <a href= "/expense/{{expense.id}}" name="expense" >
+                    <font color="black">{{expense.label}}</a>
                 </td>
-                <td>
-                  {{expense.amount/100}}
+                <td align="right">
+                  <strong><font color="#007bff">{{expense.amount/100}} €</font></strong>
                 </td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
-        <button type="submit" class="btn btn-primary">Add expense</button>
-        <a href= "/" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
-      </form>
-    </center>
+        <button id="Button" type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i></button>
+        <a href= "/" id= "cancel" name= "cancel" class="btn btn-light border-radius: 0.9rem">Cancel</a>
+        </center>
+        <br></br>
+        <a href= "/balance/{{id}}" class="btn  transparent-background btn-primary">Balance</a>
+    </form>
     </div>
     <div class="col">
     </div>
-  </div>
-  <a href= "/balance/{{id}}" class="btn btn-light">
-    <button type="submit" class="btn btn-primary">Balance</button>
-  </a>
+</div>
 </div>
 {% endblock %}
