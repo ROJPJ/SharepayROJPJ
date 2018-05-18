@@ -33,8 +33,8 @@ function saveEvent(request, result){
   }
 
   events.saveEvent(event)
-  .then((event) => {
-    if (event.id === undefined) {
+  .then((saved) => {
+    if (event.delete) {
       getEvents(request, result);
     } else {
       result.render("eventExpenses", event);
