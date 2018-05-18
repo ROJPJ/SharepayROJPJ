@@ -6,7 +6,10 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <div id="tableAll">Expense for <b><br/><a href= "/event/{{id}}">{{event_label}}</a></b></div>
+      <br>
+      <div id="tableAll">Expense for <b><br></br><a href= "/event/{{id}}" style="color: #007bff">{{event_label}}</a></b></div>
+      </br>
+      {# <div id="tableAll">Expense for <b><br/><a href= "/event/{{id}}">{{event_label}}</a></b></div> #}
 
       <form action="/expense" method="post">
         <input type= "hidden" name= "id" value= "{{id}}">
@@ -43,6 +46,8 @@
         <button type="submit" name="btnSave" class="btn btn-primary">Save</button>
         <a href= "/eventexpense/{{event_id}}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
         <button type="submit" name="btnDelete" class="btn btn-alert">Delete</button>
+        </br>
+        </br>
       </form>
     </div>
     <div class="col">
