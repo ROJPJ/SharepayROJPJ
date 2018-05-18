@@ -4,6 +4,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const passport = require("passport");
 const Events = require("./handlers/get_events.js");
 const getEventExpenses = require("./handlers/get_eventExpenses.js");
+const getBalance = require("./handlers/get_balance.js");
 const getAddExpense = require("./handlers/get_addExpense.js");
 const getUpdateExpense = require("./handlers/get_updateExpense.js");
 const Users = require("./handlers/users.js");
@@ -104,6 +105,8 @@ passport.use(new FacebookStrategy(
           .then((rows) => {
             if (rows.length === 0){
               tableUser.insertUser(user.name, user.email, user.id);
+            } else {
+              tableUser.updateUser(user.email, user.id);
             }
           });
           callback(null, {
@@ -203,6 +206,10 @@ require("connect-ensure-login").ensureLoggedIn("/login"),
 app.get("/event/:id",
 require("connect-ensure-login").ensureLoggedIn("/login"),
  getEventExpenses.getEventExpenses);
+
+ app.get("/balance/:id",
+ require("connect-ensure-login").ensureLoggedIn("/login"),
+  getBalance);
 
 app.post("/expense/add",
 require("connect-ensure-login").ensureLoggedIn("/login"),
