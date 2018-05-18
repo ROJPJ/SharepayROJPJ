@@ -6,20 +6,41 @@
     <div class="col">
     </div>
     <div class="col-6">
-      <div >Add Expense {{label}}</div>
-      <form action="/expense/save" method="post">
-        <input type= "hidden" name= "user_id" value= "{{user.user_id}}">
+      <h3>Expense for <b>{{event_label}}</b></h3>
+      <form action="/expense" method="post">
         <input type= "hidden" name= "id" value= "{{id}}">
         <div>
           <label>Label</label>
-          <input type="text" name="label" class="form-control">
+          <input type="text" name="label" class="form-control" value="{{label}}">
         </div>
         <div>
           <label>Amount</label>
-          <input type="integer" name="amount" class="form-control">
+          <input type="integer" name="amount" class="form-control" value="{{amount/100}}">
         </div>
-      <button type="submit" class="btn btn-primary">Save</button>
-      <a href= "/event/{{id}}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+        <div>
+          <label>Payer</label>
+          <input type="text" name="user_name" class="form-control" value="{{name}}">
+        </div>
+        <div>
+          <h4>Users</h4>
+          <table class="table" id="users" name="users">
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td>
+                  <input type="hidden" value="{{user.name}}" name="user"/>{{user.name}}
+                </td>
+                <td>
+                  <input type="checkbox" class="form-check-input" name="{{user.id}}" {{user.checked}}/>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href= "/eventexpense/{{event_id}}" id= "cancel" name= "cancel" class="btn btn-light">Cancel</a>
+      </form>
     </div>
     <div class="col">
     </div>

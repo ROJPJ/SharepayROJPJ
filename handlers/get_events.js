@@ -1,5 +1,4 @@
 const events = require("../entities/events.js");
-const uuidv4 = require("uuid/v4");
 
 function getEvents(request, result) {
   events.findAll()
@@ -9,19 +8,30 @@ function getEvents(request, result) {
 }
 
 function getAddEvent(request, result) {
-    result.render("event", {user: request.user});
+  result.render("event", {user: request.user});
+}
+
+function getUpdateEvent(request, result) {
+  events.getEvent(request.params.id)
+  .then((row) => {
+    result.render("event", {user: request.user, event: row});
+  });
 }
 
 function saveEvent(request, result){
   let event = request.body;
-  event.id = uuidv4();
+
   const currentdate = new Date();
   const year = currentdate.getFullYear();
   const month = "0" + currentdate.getMonth();
   const day = "0" + currentdate.getDay();
   event.date = `${year}-${month.substr(-2, 2)}-${day.substr(-2, 2)}`;
-  event.status_id = "O";
-  events.insertEvent(event)
+
+  if (!event.status_id) {
+    event.status_id = "O";
+  }
+
+  events.saveEvent(event)
   .then((event) => {
     result.render("eventExpenses", event);
   })
@@ -33,5 +43,6 @@ function saveEvent(request, result){
 module.exports = {
   getEvents: getEvents,
   getAddEvent: getAddEvent,
+  getUpdateEvent: getUpdateEvent,
   saveEvent: saveEvent
 }
